@@ -1,6 +1,6 @@
 {-#LANGUAGE OverloadedStrings #-}
 
-import QRCodes
+import Data.QRCodes
 import qualified Data.ByteString as B
 import System.Environment (getArgs)
 
