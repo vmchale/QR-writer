@@ -1,6 +1,6 @@
 name:                QRImager
 version:             0.1.0.0
-synopsis:            Initial project template from stack
+synopsis:            Library to generate QR codes from bytestrings and objects
 description:         Please see README.md
 homepage:            https://github.com/vmchale/QRImager#readme
 license:             BSD3

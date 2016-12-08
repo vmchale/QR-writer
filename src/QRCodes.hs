@@ -50,18 +50,22 @@ mkSig string = do
     let signed = fmap unJwt signedToken
     liftEither id (return <$> signed)
 
+-- | Creates a signed QR code from a strict bytestring
 byteStringToQRSec :: BS.ByteString -> FilePath -> IO ()
 byteStringToQRSec string filepath = (flip byteStringToQR filepath) =<< (mkSig string)
 
+-- | Creates a signed QR code from an object that is part of the ToJSON class
 createSecureQRCode :: (ToJSON a) => a -> FilePath -> IO ()
 createSecureQRCode object = byteStringToQRSec (toStrict $ encode object)
 
 liftEither :: (Show b, Monad m) => (t -> m a) -> Either b t -> m a
 liftEither = either (error . show)
 
+-- | Creates a QR code from an object that is part of the ToJSON class
 createQRCode :: (ToJSON a) => a -> FilePath -> IO ()
 createQRCode object filepath = let input = toStrict $ encode object in byteStringToQR input filepath
 
+-- | Creates a QR code from a strict bytestring
 byteStringToQR :: BS.ByteString -> FilePath -> IO ()
 byteStringToQR input filepath = do
     smallMatrix <- toMatrix <$> encodeByteString input Nothing QR_ECLEVEL_H QR_MODE_EIGHT False

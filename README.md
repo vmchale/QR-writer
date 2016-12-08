@@ -1,6 +1,9 @@
 #QR Imager Library
 This is a library to generate `.png` files from QR codes.
 
+##Dependencies
+The library depends on the C library [https://github.com/fukuchi/libqrencode](libqrencode) which you will need to install separately.
+
 ##Usage
 The library exports main functions - `createQRCode` and `byteStringToQR` - and their secured/signed versions. The first takes any object that is an instance of `ToJSON` and writes an image to file, while the second takes a (strict) bytestring and writes it to file.
 
