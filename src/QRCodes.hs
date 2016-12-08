@@ -1,10 +1,11 @@
 {-# LANGUAGE GADTs            #-}
 {-# LANGUAGE FlexibleContexts #-}
 
-module QRCodes where--(createSecureQRCode
-              --, createQRCode
-              --, byteStringToQR
-              --) where
+module QRCodes (createSecureQRCode
+              , createQRCode
+              , byteStringToQR
+              , byteStringToQRSec
+              ) where
 
 import Data.Aeson
 import Data.QRCode
@@ -31,8 +32,8 @@ import Control.Applicative ((<$>))
 
 checkSig :: BS.ByteString -> IO (Either JwtError BS.ByteString)
 checkSig tok = do
-    key <- read <$> readFile "key.hk"
-    let jws = rsaDecode key tok
+    key <- read <$> readFile "~/.key.hk" :: IO (Cr.PublicKey, Cr.PrivateKey)
+    let jws = rsaDecode (view _1 key) tok
     return $ fmap (view _2) jws
 
 mkSig :: BS.ByteString -> IO BS.ByteString
@@ -41,7 +42,7 @@ mkSig string = do
     if not switch then do
         putStrLn "generating key..."
         key <- Cr.generate 512 0x10001
-        writeFile ".key.hk" (show key)
+        writeFile "~/.key.hk" (show key)
     else
         return ()
     key' <- read <$> readFile "~/.key.hk" :: IO (Cr.PublicKey, Cr.PrivateKey)
@@ -53,10 +54,10 @@ byteStringToQRSec :: BS.ByteString -> FilePath -> IO ()
 byteStringToQRSec string filepath = (flip byteStringToQR filepath) =<< (mkSig string)
 
 createSecureQRCode :: (ToJSON a) => a -> FilePath -> IO ()
-createSecureQRCode object filepath = byteStringToQRSec (toStrict $ encode object) filepath
+createSecureQRCode object = byteStringToQRSec (toStrict $ encode object)
 
 liftEither :: (Show b, Monad m) => (t -> m a) -> Either b t -> m a
-liftEither = either (fail . show)
+liftEither = either (error . show)
 
 createQRCode :: (ToJSON a) => a -> FilePath -> IO ()
 createQRCode object filepath = let input = toStrict $ encode object in byteStringToQR input filepath
