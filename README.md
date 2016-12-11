@@ -22,4 +22,4 @@ in the appropriate directory, and it will be installed on your path.
 
 Compiling will generate an executable called `QRPipe` which reads from `stdin` and outputs a file as the second argument, e.g.
 
-```echo 'My name is:" | QRPipe "nametag.png"```
+```echo 'My name is:" | qrpipe "nametag.png"```
