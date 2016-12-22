@@ -9,3 +9,4 @@ main = do
     pipeIn <- B.getContents
     filepath <- fmap (flip (!!) 0) getArgs
     byteStringToQRSec pipeIn filepath
+    readQRStrSec filepath >>= print
