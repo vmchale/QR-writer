@@ -2,10 +2,10 @@
 This is a library to generate `.png` files from QR codes.
 
 ##Dependencies
-The library depends on the C library [https://github.com/fukuchi/libqrencode](libqrencode) which you will need to install separately.
+The library depends on the C library [https://github.com/fukuchi/libqrencode](libqrencode) which you will need to install separately, as well as the C library `Zbar` from [here](https://github.com/ZBar/ZBar). You should also be able to get them from your distro. 
 
 ##Usage
-The library exports main functions - `createQRCode` and `byteStringToQR` - and their secured/signed versions. The first takes any object that is an instance of `ToJSON` and writes an image to file, while the second takes a (strict) bytestring and writes it to file.
+The library exports three main functions - `createQRCode`, `readQRString`, and `byteStringToQR` - and their secured/signed versions. The first takes any object that is an instance of `ToJSON` and writes an image to file, while the second takes filepath pointing to an image and returns the text in the QR code. The third takes a (strict) bytestring and writes it to file.
 
 ##Executable
 
@@ -20,6 +20,6 @@ in the appropriate directory, and it will be installed on your path.
 
 ###Use
 
-Compiling will generate an executable called `QRPipe` which reads from `stdin` and outputs a file as the second argument, e.g.
+Compiling will generate an executable called `qrpipe` which reads from `stdin` and outputs a file as the second argument, e.g.
 
 ```echo 'My name is:" | qrpipe "nametag.png"```
