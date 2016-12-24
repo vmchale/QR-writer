@@ -6,6 +6,7 @@ module Data.QRCodes ( createSecureQRCode
                     , createQRCode
                     , byteStringToQR
                     , byteStringToQRSec
+                    -- * functions to read in QR codes with the Zbar library
                     , readQRString
                     , readQRStrSec
                     ) where
