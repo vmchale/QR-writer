@@ -1,5 +1,5 @@
 name:                qr-imager
-version:             0.1.2.1
+version:             0.2.0.0
 synopsis:            Library to generate QR codes from bytestrings and objects
 description:         Please see README.md
 homepage:            https://github.com/vmchale/QRImager#readme

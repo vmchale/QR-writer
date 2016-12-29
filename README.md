@@ -31,3 +31,6 @@ To then read the nametag:
 ```
 qrpipe read "nametag.png"
 ```
+
+## Library
+The library can be used via the exported functions `createQRCode`, `byteStringToQR` and `readQRString`, plus their signed counterparts. 
