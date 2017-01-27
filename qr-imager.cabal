@@ -1,5 +1,5 @@
 name:                qr-imager
-version:             0.2.1.2
+version:             0.2.1.3
 synopsis:            Library to generate QR codes from bytestrings and objects
 description:         Please see README.md
 homepage:            https://github.com/vmchale/QRImager#readme
@@ -34,6 +34,8 @@ library
                      , process
                      , MissingH
                      , optparse-applicative
+  pkgconfig-depends:   libqrencode
+                     , zbar 
   default-language:    Haskell2010
 
 executable qrpipe
