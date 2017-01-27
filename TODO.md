@@ -1,0 +1,7 @@
+- [x] Applicative options parser
+- [x] decode QR Codes
+- [ ] optional flag for keyfile
+    - [x] added to library
+- [ ] functions to interface nicely with JuicyPixels
+- [ ] pass keys as CR.Key not filepaths!
+- [ ] flag to build exec/make test suite work
