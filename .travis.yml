@@ -26,6 +26,7 @@ addons:
       - libqrencode-dev
       - binutils
       - libzbar-dev
+      - libgmp-dev
 
 before_install:
 # Download and unpack the stack executable

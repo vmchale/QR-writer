@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-} 
 
-import System.Process
+import Data.QRCodes
 
 main :: IO ()
 main = do
     byteStringToQRSec "hello friend" ".key.hk" "qrcode.png"
-    readQRStrSec "qrcode.png" ".key.hk" >>= print
+    --readQRStrSec "qrcode.png" ".key.hk" >>= print
