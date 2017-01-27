@@ -24,6 +24,7 @@ addons:
   apt:
     packages:
       - libqrencode-dev
+      - binutils
       - libzbar-dev
 
 before_install:
