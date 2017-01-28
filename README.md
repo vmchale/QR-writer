@@ -1,5 +1,5 @@
 # QR Imager Library
-![alt text](https://travis-ci.org/vmchale/QR-writer.svg?branch=master "build status")
+[![Build Status](https://travis-ci.org/vmchale/QR-writer.svg?branch=master)](https://travis-ci.org/vmchale/QR-writer)
 
 This is a library to generate `.png` files from QR codes.
 
