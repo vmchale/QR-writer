@@ -25,7 +25,7 @@ addons:
     packages:
       - libqrencode-dev
       - binutils
-      - libzbar-dev
+      - zbar-tools
       - libgmp-dev
 
 before_install:
