@@ -76,10 +76,10 @@ readQRString filepath = (map toLower) . init . (drop 8 . view _2) <$> readCreate
 readQRStrSec :: FilePath -> FilePath -> IO String
 readQRStrSec filepath keyfile = do
     enc <- (map toLower) . init . (drop 8) . (view _2) <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
-    (fmap $ liftEither show) . (flip checkSigFile keyfile) . resolveUpper $ (BS.pack) enc
+    (fmap $ liftEither BS.unpack) . (flip checkSigFile keyfile) . resolveUpper $ (BS.pack) enc
 
 -- | Read an image containing a QR code, decode and verify the signature using the given key.
 readQRStrSec' :: FilePath -> (PublicKey, PrivateKey) -> IO String
 readQRStrSec' filepath key = do
     enc <- (map toLower) . init . (drop 8) . (view _2) <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
-    (fmap $ liftEither show) . (flip checkSig key) . resolveUpper $ (BS.pack) enc
+    (fmap $ liftEither BS.unpack) . (flip checkSig key) . resolveUpper $ (BS.pack) enc
