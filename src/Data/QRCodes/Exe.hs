@@ -2,6 +2,7 @@
 module Data.QRCodes.Exe where
 
 import Options.Applicative
+import Data.Aeson
 import qualified Data.ByteString as B
 import System.Environment (getArgs) --fix soon!
 import Data.QRCodes
@@ -28,22 +29,22 @@ exec = execParser full >>= act
 -- | Takes a `Prog` and returns the appropriate IO action
 act :: Prog -> IO ()
 act (Prog Output True True filepath) = do
-    pipeIn <- B.getContents
-    byteStringToQRSec pipeIn ".key.hk" filepath
-    readQRStrSec filepath ".key.hk" >>= print
+    pipeIn <- getContents
+    createSecureQRCode pipeIn ".key.hk" filepath
+    (readQRStrSec filepath ".key.hk" :: IO String) >>= print
 act (Prog Output False True filepath) = do
     pipeIn <- B.getContents
     byteStringToQR pipeIn filepath
     readQRString filepath >>= print
 act (Prog Output True False filepath) = do
-    pipeIn <- B.getContents
-    byteStringToQRSec pipeIn ".key.hk" filepath
+    pipeIn <- getContents
+    createSecureQRCode (pipeIn) ".key.hk" filepath
 act (Prog Output False False filepath) = do
     pipeIn <- B.getContents
     byteStringToQR pipeIn filepath
-act (Prog Input True _ filepath) = do
-    readQRStrSec filepath ".key.hk" >>= print
-act (Prog Input False _ filepath) = do
+act (Prog Input True _ filepath) = 
+    (readQRStrSec filepath ".key.hk" :: IO String) >>= print
+act (Prog Input False _ filepath) = 
     readQRString filepath >>= print
 
 -- | Parser for the command line

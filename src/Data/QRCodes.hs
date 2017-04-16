@@ -8,8 +8,6 @@ module Data.QRCodes (-- * Functions on objects
                     , createSecureQRCode'
                     -- * Functions for `ByteStrings`
                     , byteStringToQR
-                    , byteStringToQRSec
-                    , byteStringToQRSec'
                     -- * functions to read QR codes
                     , readQRString
                     , readQRStrSec
@@ -20,9 +18,11 @@ import Data.Aeson
 import Codec.Picture.Png (writePng)
 import Data.ByteString.Lazy (toStrict)
 import qualified Data.ByteString.Char8 as BS
+import qualified Data.ByteString.Lazy.Char8 as BSL
 import Data.Char (toLower)
-import Control.Lens.Tuple
-import Control.Lens (view)
+import Data.Maybe
+import Lens.Micro 
+import Lens.Micro.Extras
 import Control.Applicative ((<$>))
 import System.Process
 import Data.QRCodes.Utils
@@ -73,13 +73,13 @@ readQRString filepath = (map toLower) . init . (drop 8 . view _2) <$> readCreate
 -- | given a filepath pointing to a QR code, get the contents & verify signature with the keyfile
 --
 -- > readQRStrSec "output.png" ".key.hk"
-readQRStrSec :: FilePath -> FilePath -> IO String
-readQRStrSec filepath keyfile = do
+readQRStrSec :: (FromJSON a) => FilePath -> FilePath -> IO a
+readQRStrSec filepath keyfile = fromJust . decode . BSL.pack <$> do
     enc <- (map toLower) . init . (drop 8) . (view _2) <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
     (fmap $ liftEither BS.unpack) . (flip checkSigFile keyfile) . resolveUpper $ (BS.pack) enc
 
 -- | Read an image containing a QR code, decode and verify the signature using the given key.
-readQRStrSec' :: FilePath -> (PublicKey, PrivateKey) -> IO String
-readQRStrSec' filepath key = do
+readQRStrSec' :: (FromJSON a) => FilePath -> (PublicKey, PrivateKey) -> IO a
+readQRStrSec' filepath key = fromJust . decode . BSL.pack <$> do
     enc <- (map toLower) . init . (drop 8) . (view _2) <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
     (fmap $ liftEither BS.unpack) . (flip checkSig key) . resolveUpper $ (BS.pack) enc

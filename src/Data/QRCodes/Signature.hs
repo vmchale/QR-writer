@@ -5,7 +5,8 @@ import Jose.Jws
 import qualified Data.ByteString.Char8 as BS
 import Jose.Jwt (unJwt, JwtError)
 import Crypto.PubKey.RSA
-import Control.Lens
+import Lens.Micro 
+import Lens.Micro.Extras
 import System.Directory
 import Jose.Jwa (JwsAlg (RS256))
 import Data.QRCodes.Utils

@@ -11,6 +11,6 @@ main = hspec $ do
     it "reads a QR code" $ do
       readQRString "qrcode.png" >>= (`shouldBe` "hello world")
     it "writes a secure QR code" $ do
-      byteStringToQRSec "helloworld" ".key.hk" "qrcode-sec.png" >>= (`shouldBe` ())
-    it "reads a secire QR code" $ do
-      readQRStrSec "qrcode-sec.png" ".key.hk" >>= (`shouldBe` "helloworld")
+      createSecureQRCode ("small" :: String) ".key.hk" "qrcode-sec.png" >>= (`shouldBe` ())
+    it "reads a secure QR code" $ do
+      (readQRStrSec "qrcode-sec.png" ".key.hk" :: IO String) >>= (`shouldBe` "small")
