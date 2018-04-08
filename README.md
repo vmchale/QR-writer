@@ -1,4 +1,5 @@
 # QR Imager Library
+
 [![Build Status](https://travis-ci.org/vmchale/QR-writer.svg?branch=master)](https://travis-ci.org/vmchale/QR-writer)
 
 This is a library to generate `.png` files from QR codes.
@@ -10,17 +11,6 @@ The library depends on the C library [libqrencode](https://github.com/fukuchi/li
 The library can be used via the exported functions `createQRCode`, `byteStringToQR` and `readQRString`, plus their signed counterparts. The first two export to ".png" while the third can be used on any image format `Zbar` supports.
 
 The functions `bsToImg` and `objToImg` output JuicyPixels images for your further manipulation.
-
-## Executable
-
-### Installation
-For building haskell, the best tool is currently [http://haskellstack.org](stack). Install it, and then type
-
-```
-stack install --install-ghc
-```
-
-in the appropriate directory, and it will be installed to your path. 
 
 ### Use
 

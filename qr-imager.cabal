@@ -1,6 +1,6 @@
 cabal-version: >=1.10
 name: qr-imager
-version: 1.0.1.7
+version: 1.0.1.8
 license: BSD3
 license-file: LICENSE
 copyright: Copyright: (c) 2016-2018 Vanessa McHale
