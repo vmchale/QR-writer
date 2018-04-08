@@ -3,8 +3,8 @@ name: qr-imager
 version: 1.0.1.7
 license: BSD3
 license-file: LICENSE
-copyright: Copyright: (c) 2016 Vanessa McHale
-maintainer: vanessa.mchale@reconfigure.io
+copyright: Copyright: (c) 2016-2018 Vanessa McHale
+maintainer: vamchale@gmail.com
 author: Vanessa McHale
 stability: stable
 homepage: https://github.com/vmchale/QRImager#readme
