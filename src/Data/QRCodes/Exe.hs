@@ -1,12 +1,12 @@
 -- | Parse options applicatively and read or write secure or non-secure QR codes.
 module Data.QRCodes.Exe where
 
-import Options.Applicative
-import Data.Aeson
-import qualified Data.ByteString as B
-import System.Environment (getArgs) --fix soon!
-import Data.QRCodes
-import Data.Monoid
+import           Data.Aeson
+import qualified Data.ByteString     as B
+import           Data.QRCodes
+import           Data.Semigroup
+import           Options.Applicative
+import           System.Environment  (getArgs)
 
 -- | Data type for the executable comprising the command, whether to sign, whether to verify it worked, and the output filename
 data Prog = Prog { cmd     :: Com
@@ -20,7 +20,7 @@ data Com = Input | Output
 -- | main exec function
 exec :: IO ()
 exec = execParser full >>= act
-    where 
+    where
         full = info (helper <*> program)
             ( fullDesc
             <> progDesc "Read/Write QR Codes with files"
@@ -38,13 +38,13 @@ act (Prog Output False True filepath) = do
     readQRString filepath >>= print
 act (Prog Output True False filepath) = do
     pipeIn <- getContents
-    createSecureQRCode (pipeIn) ".key.hk" filepath
+    createSecureQRCode pipeIn ".key.hk" filepath
 act (Prog Output False False filepath) = do
     pipeIn <- B.getContents
     byteStringToQR pipeIn filepath
-act (Prog Input True _ filepath) = 
+act (Prog Input True _ filepath) =
     (readQRStrSec filepath ".key.hk" :: IO String) >>= print
-act (Prog Input False _ filepath) = 
+act (Prog Input False _ filepath) =
     readQRString filepath >>= print
 
 -- | Parser for the command line

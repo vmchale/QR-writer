@@ -10,30 +10,30 @@ module Data.QRCodes.Image (-- * Functions to convert to JuicyPixels `Image`
                           , objToImgSec'
                           ) where
 
-import Data.Word (Word8)
-import Codec.Picture.Types as T
-import Prelude as P
-import qualified Data.Vector.Storable as V
-import qualified Data.ByteString as BS
-import Data.ByteString.Lazy (toStrict)
-import Data.QRCode
-import Data.Aeson
-import Data.QRCodes.Utils
-import Data.QRCodes.Signature
-import Crypto.PubKey.RSA
+import           Codec.Picture.Types    as T
+import           Crypto.PubKey.RSA
+import           Data.Aeson
+import qualified Data.ByteString        as BS
+import           Data.ByteString.Lazy   (toStrict)
+import           Data.QRCode
+import           Data.QRCodes.Signature
+import           Data.QRCodes.Utils
+import qualified Data.Vector.Storable   as V
+import           Data.Word              (Word8)
+import           Prelude                as P
 
 -- | Creates a signed QR code from a strict bytestring and path to keyfile/path where the keyfile should be generated, yielding a JuicyPixels `Image`.
 -- Note that QR codes may only contain a small number of characters, so encrypting can sometimes make an object too big to encode.
 --
 -- > bsToImgSec (BS.pack "hello") ".key.hk"
 bsToImgSec :: BS.ByteString -> FilePath -> IO (T.Image Word8)
-bsToImgSec string keyfile = bsToImg =<< (((fmap preserveUpper) . (flip mkSigFile keyfile)) string)
+bsToImgSec string keyfile = bsToImg =<< (fmap preserveUpper . flip mkSigFile keyfile) string
 
 -- | Sign a byteString with a given key
 --
 -- > bsToImgSec' (BS.pack "str") (generate 256 0x10001)
 bsToImgSec' :: BS.ByteString -> (PublicKey, PrivateKey) -> IO (T.Image Word8)
-bsToImgSec' string key = bsToImg =<< (((fmap preserveUpper) . (flip mkSig key)) string)
+bsToImgSec' string key = bsToImg =<< (fmap preserveUpper . flip mkSig key) string
 
 -- | Encode an object as a JuicyPixels `Image` with a key in a given file.
 objToImgSec :: (ToJSON a) => a -> FilePath -> IO (T.Image Word8)
@@ -66,4 +66,4 @@ encodePng matrix = Image dim dim vector
 --
 -- to scale @smallMatrix :: [[Word8]]@ by a factor of 8
 fattenList :: Int -> [a] -> [a]
-fattenList i l = P.concat $ P.foldr ((:) . (P.replicate i)) [] l
+fattenList i l = P.concat $ P.foldr ((:) . P.replicate i) [] l
