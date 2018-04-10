@@ -1,5 +1,5 @@
 -- | Miscellaneous helper functions that don't fit anywhere else
-module Data.QRCodes.Utils where
+module Data.QRCodes.Utils (replace, preserveUpper, resolveUpper, swapWord, liftEither) where
 
 import qualified Data.ByteString.Char8 as BS
 import           Data.Char             (toLower, toUpper)
@@ -24,7 +24,7 @@ resolveUpper = lift rU
 lift :: (String -> String) -> (BS.ByteString -> BS.ByteString)
 lift f = BS.pack . f . BS.unpack
 
--- | helper function to life Either values to IO in our case
+-- | helper function to lift Either values to IO in our case
 liftEither :: (Show b, Monad m) => (t -> m a) -> Either b t -> m a
 liftEither = either (error . show)
 
