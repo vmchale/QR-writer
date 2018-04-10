@@ -1,5 +1,5 @@
 -- | Miscellaneous helper functions that don't fit anywhere else
-module Data.QRCodes.Utils (replace, preserveUpper, resolveUpper, swapWord, liftEither) where
+module Data.QRCodes.Utils (preserveUpper, resolveUpper, swapWord, liftEither) where
 
 import qualified Data.ByteString.Char8 as BS
 import           Data.Char             (toLower, toUpper)
