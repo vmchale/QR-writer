@@ -17,7 +17,7 @@ module Data.QRCodes (-- * Functions on objects
 import           Codec.Picture.Png          (writePng)
 import           Control.Applicative        ((<$>))
 import           Crypto.PubKey.RSA
-import           Data.Aeson
+import           Data.Binary
 import qualified Data.ByteString.Char8      as BS
 import           Data.ByteString.Lazy       (toStrict)
 import qualified Data.ByteString.Lazy.Char8 as BSL
@@ -47,17 +47,17 @@ byteStringToQRSec' :: BS.ByteString -> (PublicKey, PrivateKey) -> FilePath -> IO
 byteStringToQRSec' string key filepath = flip byteStringToQR filepath =<< (fmap preserveUpper . flip mkSig key) string
 
 -- | Creates a signed QR code from an object that is part of the ToJSON class
-createSecureQRCode :: (ToJSON a) => a -> FilePath -> FilePath -> IO ()
+createSecureQRCode :: (Binary a) => a -> FilePath -> FilePath -> IO ()
 createSecureQRCode object = byteStringToQRSec (toStrict $ encode object)
 
 -- | Creates a signed QR code from an object that is part of the ToJSON class
-createSecureQRCode' :: (ToJSON a) => a -> (PublicKey, PrivateKey) -> FilePath -> IO ()
+createSecureQRCode' :: (Binary a) => a -> (PublicKey, PrivateKey) -> FilePath -> IO ()
 createSecureQRCode' object = byteStringToQRSec' (toStrict $ encode object)
 
 -- | Creates a QR code from an object that is part of the ToJSON class
 --
 -- > createQRCode userRecord "user-231.png"
-createQRCode :: (ToJSON a) => a -> FilePath -> IO ()
+createQRCode :: (Binary a) => a -> FilePath -> IO ()
 createQRCode object filepath = let input = toStrict $ encode object in byteStringToQR input filepath
 
 -- | Create a QR code, writing an image to the given 'FilePath'
@@ -73,13 +73,13 @@ readQRString filepath = map toLower . init . (drop 8 . view _2) <$> readCreatePr
 -- | given a filepath pointing to a QR code, get the contents & verify signature with the keyfile
 --
 -- > readQRStrSec "output.png" ".key.hk"
-readQRStrSec :: (FromJSON a) => FilePath -> FilePath -> IO a
-readQRStrSec filepath keyfile = fromJust . decode . BSL.pack <$> do
+readQRStrSec :: (Binary a) => FilePath -> FilePath -> IO a
+readQRStrSec filepath keyfile = decode . BSL.pack <$> do
     enc <- map toLower . init . drop 8 . view _2 <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
     fmap (liftEither BS.unpack) . flip checkSigFile keyfile . resolveUpper $ BS.pack enc
 
 -- | Read an image containing a QR code, decode and verify the signature using the given key.
-readQRStrSec' :: (FromJSON a) => FilePath -> (PublicKey, PrivateKey) -> IO a
-readQRStrSec' filepath key = fromJust . decode . BSL.pack <$> do
+readQRStrSec' :: (Binary a) => FilePath -> (PublicKey, PrivateKey) -> IO a
+readQRStrSec' filepath key = decode . BSL.pack <$> do
     enc <- map toLower . init . drop 8 . view _2 <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
     fmap (liftEither BS.unpack) . flip checkSig key . resolveUpper $ BS.pack enc

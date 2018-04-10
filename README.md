@@ -5,7 +5,7 @@
 This is a library to generate `.png` files from QR codes.
 
 ## Dependencies
-The library depends on the C library [libqrencode](https://github.com/fukuchi/libqrencode) which you will need to install separately, as well as the C library `Zbar` from [here](https://github.com/ZBar/ZBar). You should also be able to get them from your distro. 
+The library depends on the C library [libqrencode](https://github.com/fukuchi/libqrencode) which you will need to install separately, as well as the command-line tool `Zbar` from [here](https://github.com/ZBar/ZBar). You should also be able to get them from your distro. 
 
 ## Library
 The library can be used via the exported functions `createQRCode`, `byteStringToQR` and `readQRString`, plus their signed counterparts. The first two export to ".png" while the third can be used on any image format `Zbar` supports.

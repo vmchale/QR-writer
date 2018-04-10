@@ -1,6 +1,6 @@
 -- | A few functions to deal with the image itself
-module Data.QRCodes.Image (-- * Functions to convert to JuicyPixels `Image`
-                          bsToImg
+module Data.QRCodes.Image ( -- * Functions to convert to JuicyPixels `Image`
+                            bsToImg
                           , objToImg
                           -- * Functions to sign and convert to `Image`
                           , bsToImgSec
@@ -12,7 +12,7 @@ module Data.QRCodes.Image (-- * Functions to convert to JuicyPixels `Image`
 
 import           Codec.Picture.Types    as T
 import           Crypto.PubKey.RSA
-import           Data.Aeson
+import           Data.Binary
 import qualified Data.ByteString        as BS
 import           Data.ByteString.Lazy   (toStrict)
 import           Data.QRCode
@@ -36,11 +36,11 @@ bsToImgSec' :: BS.ByteString -> (PublicKey, PrivateKey) -> IO (T.Image Word8)
 bsToImgSec' string key = bsToImg =<< (fmap preserveUpper . flip mkSig key) string
 
 -- | Encode an object as a JuicyPixels `Image` with a key in a given file.
-objToImgSec :: (ToJSON a) => a -> FilePath -> IO (T.Image Word8)
+objToImgSec :: (Binary a) => a -> FilePath -> IO (T.Image Word8)
 objToImgSec obj = bsToImgSec (toStrict $ encode obj)
 
 -- | Encode an object as a JuicyPixels `Image` with a key.
-objToImgSec' :: (ToJSON a) => a -> (PublicKey, PrivateKey) -> IO (T.Image Word8)
+objToImgSec' :: (Binary a) => a -> (PublicKey, PrivateKey) -> IO (T.Image Word8)
 objToImgSec' obj = bsToImgSec' (toStrict $ encode obj)
 
 -- | Create a JuicyPixels `Image` from a `ByteString`
@@ -51,7 +51,7 @@ bsToImg input = do
     pure $ encodePng qrMatrix
 
 -- | Encode an object as a JuicyPixels `Image`
-objToImg :: (ToJSON a) => a -> IO (T.Image Word8)
+objToImg :: (Binary a) => a -> IO (T.Image Word8)
 objToImg obj = let input = toStrict $ encode obj in bsToImg input
 
 -- | Encode a JuicyPixels `Image` given a matrix

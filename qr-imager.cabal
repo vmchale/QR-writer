@@ -1,6 +1,6 @@
 cabal-version: >=1.10
 name: qr-imager
-version: 1.0.1.8
+version: 2.0.0.0
 license: BSD3
 license-file: LICENSE
 copyright: Copyright: (c) 2016-2018 Vanessa McHale
@@ -8,9 +8,9 @@ maintainer: vamchale@gmail.com
 author: Vanessa McHale
 stability: stable
 homepage: https://github.com/vmchale/QRImager#readme
-synopsis: Library to generate QR codes from bytestrings and objects
+synopsis: Library to generate images.
 description:
-    Please see README.md
+    Library for generate images containing QR codes, from bytestrings and objects.
 category: Data
 build-type: Simple
 extra-source-files:
@@ -34,7 +34,7 @@ library
     default-language: Haskell2010
     build-depends:
         base >=4.9 && <5,
-        aeson -any,
+        binary -any,
         JuicyPixels -any,
         vector -any,
         bytestring -any,

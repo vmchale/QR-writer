@@ -1,7 +1,7 @@
 -- | Parse options applicatively and read or write secure or non-secure QR codes.
 module Data.QRCodes.Exe where
 
-import           Data.Aeson
+import           Data.Binary
 import qualified Data.ByteString     as B
 import           Data.QRCodes
 import           Data.Semigroup
