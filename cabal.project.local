@@ -1,0 +1,3 @@
+-- constraints: qr-imager +development
+tests: true
+documentation: true
