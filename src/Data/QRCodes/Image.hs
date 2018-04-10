@@ -59,7 +59,7 @@ objToImg obj = let input = toStrict $ encode obj in bsToImg input
 encodePng :: [[Word8]] -> T.Image Word8
 encodePng matrix = Image dim dim vector
     where dim    = P.length matrix
-          vector = V.map ((*255) . swapWord) $ V.fromList $ P.concat matrix
+          vector = V.map ((*255) . swapWord) $ V.fromList $ join matrix
 
 -- | To help scale the image up, e.g.
 --
