@@ -11,6 +11,7 @@ module Data.QRCodes.Image ( -- * Functions to convert to JuicyPixels `Image`
                           ) where
 
 import           Codec.Picture.Types    as T
+import           Control.Monad
 import           Crypto.PubKey.RSA
 import           Data.Binary
 import qualified Data.ByteString        as BS
@@ -66,4 +67,4 @@ encodePng matrix = Image dim dim vector
 --
 -- to scale @smallMatrix :: [[Word8]]@ by a factor of 8
 fattenList :: Int -> [a] -> [a]
-fattenList i l = P.concat $ P.foldr ((:) . P.replicate i) [] l
+fattenList = (=<<) . replicate

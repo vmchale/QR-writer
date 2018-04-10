@@ -11,7 +11,7 @@ homepage: https://github.com/vmchale/QRImager#readme
 synopsis: Library to generate images.
 description:
     Library for generating images containing QR codes, from bytestrings and objects.
-category: Data
+category: Data, QR, Image
 build-type: Simple
 extra-source-files:
     stack.yaml
