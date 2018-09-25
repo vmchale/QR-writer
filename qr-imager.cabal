@@ -1,6 +1,6 @@
 cabal-version: 1.18
 name: qr-imager
-version: 2.0.0.0
+version: 2.0.0.1
 license: BSD3
 license-file: LICENSE
 copyright: Copyright: (c) 2016-2018 Vanessa McHale
@@ -20,7 +20,7 @@ extra-doc-files: README.md
 
 source-repository head
     type: git
-    location: https://github.com/vmchale/QRImager
+    location: https://github.com/vmchale/QR-Writer
 
 library
     exposed-modules:

@@ -27,8 +27,6 @@ import           Data.QRCodes.Image
 import           Data.QRCodes.Signature
 import           Data.QRCodes.Utils
 import           Data.Word                  (Word8)
-import           Lens.Micro
-import           Lens.Micro.Extras
 import           System.Process
 
 -- | Creates a signed QR code from a strict bytestring and path to keyfile/path.
@@ -64,22 +62,24 @@ createQRCode object filepath = let input = toStrict $ encode object in byteStrin
 byteStringToQR :: BS.ByteString -> FilePath -> IO ()
 byteStringToQR input filepath = bsToImg input >>= writePng filepath
 
+snd' (_, y, _) = y
+
 -- | given a filepath, read the QR code as a string in all lowercase
 --
 -- > readQRString "picture.jpg"
 readQRString :: FilePath -> IO String
-readQRString filepath = map toLower . init . (drop 8 . view _2) <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
+readQRString filepath = map toLower . init . (drop 8 . snd') <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
 
 -- | given a filepath pointing to a QR code, get the contents & verify signature with the keyfile
 --
 -- > readQRStrSec "output.png" ".key.hk"
 readQRStrSec :: (Binary a) => FilePath -> FilePath -> IO a
 readQRStrSec filepath keyfile = decode . BSL.pack <$> do
-    enc <- map toLower . init . drop 8 . view _2 <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
+    enc <- map toLower . init . drop 8 . snd' <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
     fmap (liftEither BS.unpack) . flip checkSigFile keyfile . resolveUpper $ BS.pack enc
 
 -- | Read an image containing a QR code, decode and verify the signature using the given key.
 readQRStrSec' :: (Binary a) => FilePath -> (PublicKey, PrivateKey) -> IO a
 readQRStrSec' filepath key = decode . BSL.pack <$> do
-    enc <- map toLower . init . drop 8 . view _2 <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
+    enc <- map toLower . init . drop 8 . snd' <$> readCreateProcessWithExitCode (shell $ "zbarimg " ++ filepath) ""
     fmap (liftEither BS.unpack) . flip checkSig key . resolveUpper $ BS.pack enc
