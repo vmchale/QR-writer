@@ -5,3 +5,4 @@
 - [ ] functions to interface nicely with JuicyPixels
 - [ ] pass keys as CR.Key not filepaths!
 - [ ] flag to build exec/make test suite work
+- [ ] Ed25519 signatures instead?

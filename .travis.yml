@@ -1,24 +1,39 @@
 ---
 sudo: false
-
-language: generic
-
+language: c
 cache:
   directories:
-    - $HOME/.stack
-
+    - $HOME/.cabal
+    - $HOME/.ghc
 addons:
   apt:
     packages:
-      - libqrencode-dev
-      - binutils
-      - zbar-tools
-      - libgmp-dev
+      - libgmp3-dev
+matrix:
+  include:
+
+    - env: TARGET=x86_64-unkown-linux-gnu
+      addons:
+        apt:
+          update: true
+          sources:
+            - hvr-ghc
+          packages:
+            - ghc-8.6.3
+            - cabal-install-2.4
+            - libqrencode-dev
 
 before_install:
-  - mkdir -p ~/.local/bin
-  - export PATH=$HOME/.local/bin:$PATH
-  - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+  - |
+    if [ `uname` = "Darwin" ]
+    then
+      brew install cabal-install
+      cabal new-update
+    else
+      export PATH=/opt/ghc/bin:$PATH
+      cabal new-update
+    fi
+  - export PATH=$HOME/.cabal/bin:$PATH
 
 script:
-  - stack --no-terminal test --haddock --no-haddock-deps
+  - cabal new-build
